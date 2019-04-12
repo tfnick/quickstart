@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" debug="false">
+
+    <property name="log.base" value="/home/GR/Logs"/>
+    <property name="log.error" value="error"/>
+    <property name="app.name" value="drools-demo"/>
+
+    <property name="pattern"
+              value="%date{'yyyy-MM-dd HH:mm:ss,SSS'} %-5level [%thread] %C.java:\\(%L\\) [%X{gid}] | %msg%n"/>
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="utf-8">
+            <pattern>${pattern}</pattern>
+            <outputPatternAsHeader>false</outputPatternAsHeader>
+        </encoder>
+    </appender>
+    <appender name="log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.base}/${app.name}/${app.name}.run.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.base}/${app.name}/${app.name}.log.%d{yyyyMMdd}</fileNamePattern>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>${pattern}</pattern>
+            <outputPatternAsHeader>false</outputPatternAsHeader>
+        </encoder>
+    </appender>
+    <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.base}/${app.name}/${log.error}/${app.name}.error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.base}/${app.name}/${log.error}/${app.name}.error.log.%d{yyyyMMdd}</fileNamePattern>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>error</level>
+        </filter>
+        <encoder charset="UTF-8">
+            <pattern>${pattern}</pattern>
+            <outputPatternAsHeader>false</outputPatternAsHeader>
+        </encoder>
+    </appender>
+    <logger name="com.gr" level="info" additivity="false">
+        <appender-ref ref="log"/>
+        <appender-ref ref="error"/>
+        <appender-ref ref="stdout"/>
+    </logger>
+
+
+    <root level="info">
+        <appender-ref ref="error"/>
+        <appender-ref ref="log"/>
+        <appender-ref ref="stdout"/>
+    </root>
+</configuration>
