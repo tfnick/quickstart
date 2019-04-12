@@ -9,23 +9,17 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>jdk-demo</artifactId>
+    <artifactId>test-tools</artifactId>
 
 
     <dependencies>
-        <!-- a simple threadpool manager https://github.com/yjfnypeu/EasyThread -->
+        <!-- https://mvnrepository.com/artifact/net.jodah/concurrentunit -->
         <dependency>
-            <groupId>com.github.yjfnypeu</groupId>
-            <artifactId>EasyThread</artifactId>
-            <version>0.5.0</version>
+            <groupId>net.jodah</groupId>
+            <artifactId>concurrentunit</artifactId>
+            <version>0.4.4</version>
+            <!--<scope>test</scope>-->
         </dependency>
-    </dependencies>
 
-    <repositories>
-        <repository>
-            <id>outer</id>
-            <name>Outer Repository</name>
-            <url>https://jitpack.io/</url>
-        </repository>
-    </repositories>
+    </dependencies>
 </project>
