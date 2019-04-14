@@ -2,15 +2,17 @@
 usecase to many app or tool
 
 # todo demo
+
 redis
 
 jdk
 
 kafka
 
+hbase(asynchbase)
+
 flink
 
-hbase(asynchbase)
 
 tidb
 

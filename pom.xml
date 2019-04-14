@@ -81,34 +81,34 @@
     </dependencies>
 
 
-    <repositories>
-        <repository>
-            <id>central</id>
-            <name>Central Repository</name>
-            <url>http://nexus.gr-data.uat/repository/maven-public/</url>
-            <layout>default</layout>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-                <checksumPolicy>warn</checksumPolicy>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<id>central</id>-->
+            <!--<name>Central Repository</name>-->
+            <!--<url>http://nexus.gr-data.uat/repository/maven-public/</url>-->
+            <!--<layout>default</layout>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+                <!--<updatePolicy>always</updatePolicy>-->
+                <!--<checksumPolicy>warn</checksumPolicy>-->
+            <!--</snapshots>-->
+            <!--<releases>-->
+                <!--<enabled>true</enabled>-->
+            <!--</releases>-->
+        <!--</repository>-->
 
-    </repositories>
+    <!--</repositories>-->
 
-    <distributionManagement>
-        <repository>
-            <id>maven-releases</id>
-            <name>Repository for JDK 1.4 builds</name>
-            <url>http://nexus.gr-data.uat/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>maven-snapshots</id>
-            <name>Repository for JDK 1.4 builds</name>
-            <url>http://nexus.gr-data.uat/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+    <!--<distributionManagement>-->
+        <!--<repository>-->
+            <!--<id>maven-releases</id>-->
+            <!--<name>Repository for JDK 1.4 builds</name>-->
+            <!--<url>http://nexus.gr-data.uat/repository/maven-releases/</url>-->
+        <!--</repository>-->
+        <!--<snapshotRepository>-->
+            <!--<id>maven-snapshots</id>-->
+            <!--<name>Repository for JDK 1.4 builds</name>-->
+            <!--<url>http://nexus.gr-data.uat/repository/maven-snapshots/</url>-->
+        <!--</snapshotRepository>-->
+    <!--</distributionManagement>-->
 </project>
