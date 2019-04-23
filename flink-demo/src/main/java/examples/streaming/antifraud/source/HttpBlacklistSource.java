@@ -1,5 +1,6 @@
 package examples.streaming.antifraud.source;
-import com.zhisheng.examples.streaming.antifraud.model.HttpBlacklistResponse;
+
+import examples.streaming.antifraud.model.HttpBlacklistResponse;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 
 public class HttpBlacklistSource extends RichSourceFunction<HttpBlacklistResponse> {

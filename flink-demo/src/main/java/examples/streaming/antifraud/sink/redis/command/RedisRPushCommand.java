@@ -1,6 +1,6 @@
 package examples.streaming.antifraud.sink.redis.command;
 
-import com.zhisheng.examples.streaming.antifraud.sink.redis.RedisCommand;
+import examples.streaming.antifraud.sink.redis.RedisCommand;
 import redis.clients.jedis.Jedis;
 
 /**

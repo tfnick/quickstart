@@ -41,6 +41,8 @@
         <module>httpclient-demo</module>
         <module>test-tools</module>
         <module>xxl-job-demo</module>
+        <module>temp-demo</module>
+        <module>temp-code</module>
     </modules>
 
 

@@ -1,6 +1,6 @@
 package examples.streaming.antifraud.source;
 
-import com.zhisheng.examples.streaming.antifraud.model.ApplyMessage;
+import examples.streaming.antifraud.model.ApplyMessage;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 

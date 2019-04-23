@@ -7,6 +7,7 @@ import java.util.List;
 //申请动作
 public class ApplyMessage implements Serializable {
     String gid;
+    String cid;
     String idCard;
     String mobile;
     String ip;
@@ -68,5 +69,13 @@ public class ApplyMessage implements Serializable {
 
     public void setContacts(List<Contacts> contacts) {
         this.contacts = contacts;
+    }
+
+    public String getCid() {
+        return cid;
+    }
+
+    public void setCid(String cid) {
+        this.cid = cid;
     }
 }

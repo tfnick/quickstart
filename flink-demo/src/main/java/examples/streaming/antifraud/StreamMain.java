@@ -1,13 +1,13 @@
 package examples.streaming.antifraud;
 
-import com.zhisheng.examples.streaming.antifraud.model.ApplyMessage;
-import com.zhisheng.examples.streaming.antifraud.source.MockNoParalleSource;
+import examples.streaming.antifraud.model.ApplyMessage;
+import examples.streaming.antifraud.source.MockNoParalleSource;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
-public class Main {
+public class StreamMain {
 
     public static void main(String[] args) throws Exception{
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
