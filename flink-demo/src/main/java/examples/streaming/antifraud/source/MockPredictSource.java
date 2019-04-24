@@ -3,7 +3,7 @@ package examples.streaming.antifraud.source;
 import examples.streaming.antifraud.model.HttpBlacklistResponse;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 
-public class HttpBlacklistSource extends RichSourceFunction<HttpBlacklistResponse> {
+public class MockPredictSource extends RichSourceFunction<HttpBlacklistResponse> {
 
     /**
      * http入参
@@ -13,7 +13,7 @@ public class HttpBlacklistSource extends RichSourceFunction<HttpBlacklistRespons
     String mobile;
 
     //构造时提供入参
-    public HttpBlacklistSource(String ip, String idCard, String mobile) {
+    public MockPredictSource(String ip, String idCard, String mobile) {
         this.ip = ip;
         this.idCard = idCard;
         this.mobile = mobile;

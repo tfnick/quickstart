@@ -7,18 +7,19 @@ import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import java.util.Date;
 import java.util.UUID;
 
-public class MockNoParalleSource implements SourceFunction<ApplyMessage> {
+public class MockMessageSource implements SourceFunction<ApplyMessage> {
 
     private boolean isRunning = true;
 
 
     @Override
     public void run(SourceContext<ApplyMessage> ctx) throws Exception {
+        String cids[] = new String[]{"1","2"};
         while(isRunning){
-            //图书的排行榜
             ApplyMessage applyMessage = new ApplyMessage();
 
             applyMessage.setGid(UUID.randomUUID().toString());
+            applyMessage.setCid(cids[RandomUtils.nextInt(0, 2)]);
             applyMessage.setApplyTime(new Date());
             applyMessage.setIdCard("" + 11012319901002577L + RandomUtils.nextInt(0, 9));
             applyMessage.setIp("192.168.1." + RandomUtils.nextInt(0, 224));
@@ -27,7 +28,7 @@ public class MockNoParalleSource implements SourceFunction<ApplyMessage> {
             ctx.collect(applyMessage);
 
             //每1秒产生一条数据
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         }
     }
 
