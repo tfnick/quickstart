@@ -11,10 +11,7 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.CellUtil;
-import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
@@ -35,40 +32,52 @@ import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
 import org.apache.hadoop.hbase.filter.SubstringComparator;
 import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
- * 一个不错的基于原生Hbase Api的工具类
+ * 一个不错的基于原生Hbase Api的工具类.
+ * Hbase的表组成：一个表可以理解成是行的集合，行（记录）是列族的集合，列族是列的集合。
+ * 列族column family：它是column的集合，在创建表的时候就指定，不能频繁修改。值得注意的是，列族的数量越少越好，因为过多的列族相互之间会影响。
+ * 生产环境中的列族一般是一个到两个。
  */
 public class HbaseUtil {
 
+    private static final String ROW_KEY_RESPONSE_NAME = "row_key";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HbaseUtil.class);
+
+    private static final HbaseUtil baseUtil = new HbaseUtil();
+
     //@Value("${hbase.zookeeper.quorum}")
-    private  String addr="HDP1,HDP2,HDP3";
+    private  String addr="192.168.1.168";
 
     //@Value("${hbase.zookeeper.property.clientPort}")
     private  String port="2181";
-
-
-    Logger logger = Logger.getLogger(getClass());
-
+    /**
+     * connection线程安全
+     */
     private static Connection connection;
 
     @SuppressWarnings("static-access")
-    public void getConnection(){
+    private void getConnection(){
         Configuration conf = HBaseConfiguration.create();
 
         conf.set("hbase.zookeeper.quorum",addr);
         conf.set("hbase.zookeeper.property.clientPort", port);
         try {
             this.connection = ConnectionFactory.createConnection(conf);
+            LOGGER.info("初始化线程安全的连接类");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public HbaseUtil() {
-        getConnection();
+    private HbaseUtil() {
+        if (connection == null) {
+            getConnection();
+        }
     }
 
     /*
@@ -78,12 +87,47 @@ public class HbaseUtil {
      * @tableName 表名
      */
 
-    public boolean isExist(String tableName) throws IOException {
+    public static boolean isExist(String tableName) throws IOException {
         TableName table_name = TableName.valueOf(tableName);
         Admin admin = connection.getAdmin();
         boolean exit = admin.tableExists(table_name);
         admin.close();
         return exit;
+    }
+
+    /**
+     * 创建表
+     * @param tableName
+     * @param families 可以不传，默认创建名为'df'的列簇
+     * @throws IOException
+     */
+    public static boolean create(String tableName,String... families) throws IOException {
+        if (families == null) {
+            families = new String[0];
+            families[0] = "df";
+        }
+        if (families.length > 2) {
+            LOGGER.error("列簇大小不允许超过2");
+            //不允许创建列族大于2的表
+            return false;
+        }
+        TableName table_name = TableName.valueOf(tableName);
+        Admin admin = connection.getAdmin();
+        boolean exists = admin.tableExists(table_name);
+        if (!exists) {
+            HTableDescriptor tableDescriptor = new HTableDescriptor(TableName.valueOf(tableName));
+            for (String family : families) {
+                tableDescriptor.addFamily(new HColumnDescriptor(family));
+            }
+            admin.createTable(tableDescriptor);
+            admin.close();
+            return true;
+        } else {
+            LOGGER.warn("数据库表{}已经存在",tableName);
+            admin.close();
+            return true;
+        }
+
     }
 
     /**
@@ -106,7 +150,13 @@ public class HbaseUtil {
         keyValue.clear();
     }
 
-
+    /**
+     * 插入数据
+     * @param tableName 表名
+     * @param rowFamilySeparator rowkey family分隔符，默认为_
+     * @param keyValues rowkey_family, <column, value>
+     * @throws IOException
+     */
     public static void addRows(String tableName, String rowFamilySeparator, Map<String, Map<String, String>> keyValues) throws IOException {
         Table table = connection.getTable(TableName.valueOf(tableName));
         List<Put> puts = new ArrayList<Put>();
@@ -260,7 +310,7 @@ public class HbaseUtil {
     }
 
     /**
-     * 根据RowKey查询
+     * 根据RowKey查询，结果中无rowkey
      * @param tableName
      * @param rowKey
      * @param family
@@ -278,6 +328,7 @@ public class HbaseUtil {
             for (Result r = rs.next(); r != null; r = rs.next()) {
                 Cell[] cells = r.rawCells();
                 row = new HashMap<String, String>();
+                row.put(ROW_KEY_RESPONSE_NAME, new String(r.getRow()));
                 for (Cell cell : cells) {
                     row.put(new String(CellUtil.cloneQualifier(cell)), new String(CellUtil.cloneValue(cell),"UTF-8"));
                 }
@@ -308,6 +359,8 @@ public class HbaseUtil {
         Result[] results = table.get(getList);
         for (Result result : results){//对返回的结果集进行操作
             Map<String, String> row = new HashMap<String, String>();
+
+            row.put(ROW_KEY_RESPONSE_NAME, new String(result.getRow()));
             for (Cell kv : result.rawCells()) {
                 row.put(new String(CellUtil.cloneQualifier(kv)), new String(CellUtil.cloneValue(kv),"UTF-8"));
             }
