@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * 演示flink通过Async IO Function接口实现异步访问数据库或者Http服务
  */
-public class AsyncHttpRequestFunction extends RichAsyncFunction<String, Tuple3<String,Integer,Integer>> {
+public class AsyncHttpRequestFunction extends RichAsyncFunction<Tuple3<String,Integer,Integer>, Tuple3<String,Integer,Integer>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AsyncHttpRequestFunction.class);
 
@@ -45,13 +45,13 @@ public class AsyncHttpRequestFunction extends RichAsyncFunction<String, Tuple3<S
     }
 
     @Override
-    public void asyncInvoke(String idCard, ResultFuture<Tuple3<String, Integer, Integer>> resultFuture) throws Exception {
+    public void asyncInvoke(Tuple3<String,Integer,Integer> input, ResultFuture<Tuple3<String, Integer, Integer>> resultFuture) throws Exception {
         //{ "code" : 200, "message" : "OK", "data" : { "id" : "10086", "x2" : 5,"x3":6}}
-        final HttpPost request = new HttpPost("http://www.mockhttp.cn/mock/gr/vars2");
+        final HttpPost request = new HttpPost("http://www.mockhttp.cn/mock/gr/model");
 
         request.setHeader("Content-type", "application/json; charset=UTF-8");
         Map<String, Object> params = Maps.newHashMap();
-        params.put("idCard", idCard);
+        params.put("idCard", input.t1());
 
         StringEntity entity = new StringEntity(JacksonUtil.toJson(params));
         request.setEntity(entity);
@@ -64,11 +64,9 @@ public class AsyncHttpRequestFunction extends RichAsyncFunction<String, Tuple3<S
 
                     Map<String, Object> iResult = JacksonUtil.json2Object(responseBody, Map.class);
                     Integer code = BasicTypeHelper.getInteger(iResult, "code");
-                    String id = BasicTypeHelper.getString(iResult, "data.id");
-                    Integer x2 = BasicTypeHelper.getInteger(iResult, "data.x2");
-                    Integer x3 = BasicTypeHelper.getInteger(iResult, "data.x3");
+                    Integer x2 = BasicTypeHelper.getInteger(iResult, "data.score");
 
-                    Tuple3<String, Integer, Integer> attrs = new Tuple3<>(id, x2, x3);
+                    Tuple3<String, Integer, Integer> attrs = new Tuple3<>(input.t1(), x2, -1);
 
                     resultFuture.complete(Lists.newArrayList(attrs));
                 } catch (Exception e) {

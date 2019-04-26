@@ -12,6 +12,11 @@ import org.apache.flink.types.Row;
 
 public class TableMain {
 
+    /**
+     * 使用table sql实现对有界数据集的查询
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception{
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         TableSource csvSource = new CsvTableSource("D:/GR_SOURCES/quickstart/flink-demo/src/main/resources/bl_mobile.csv",

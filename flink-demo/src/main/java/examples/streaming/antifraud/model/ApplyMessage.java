@@ -1,81 +1,28 @@
 package examples.streaming.antifraud.model;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-//申请动作
+//申请或者提现动作
+@Data
 public class ApplyMessage implements Serializable {
     String gid;
     String cid;
+    String et;//event type 1 申请 2 提现
+    String orderNum;
     String idCard;
+    String imei;
+    String idfa;
     String mobile;
     String ip;
     Double money;
+    //扩展时间
+    Integer x2;
+    Integer x3;
     Date applyTime;
     List<Contacts> contacts;
 
-    public String getGid() {
-        return gid;
-    }
-
-    public void setGid(String gid) {
-        this.gid = gid;
-    }
-
-    public String getIdCard() {
-        return idCard;
-    }
-
-    public void setIdCard(String idCard) {
-        this.idCard = idCard;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public Double getMoney() {
-        return money;
-    }
-
-    public void setMoney(Double money) {
-        this.money = money;
-    }
-
-    public Date getApplyTime() {
-        return applyTime;
-    }
-
-    public void setApplyTime(Date applyTime) {
-        this.applyTime = applyTime;
-    }
-
-    public List<Contacts> getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(List<Contacts> contacts) {
-        this.contacts = contacts;
-    }
-
-    public String getCid() {
-        return cid;
-    }
-
-    public void setCid(String cid) {
-        this.cid = cid;
-    }
 }
