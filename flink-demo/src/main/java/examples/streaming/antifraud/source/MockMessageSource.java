@@ -24,7 +24,7 @@ public class MockMessageSource implements SourceFunction<ApplyMessage> {
             applyMessage.setIdCard("" + 1008L + RandomUtils.nextInt(0, 9));
             applyMessage.setIp("192.168.1." + RandomUtils.nextInt(0, 224));
             applyMessage.setMobile("1380013800" + RandomUtils.nextInt(0, 9));
-            applyMessage.setMoney(RandomUtils.nextDouble(1000, 5000));
+            applyMessage.setMoney(Double.valueOf(RandomUtils.nextLong(1000, 5000)));
             ctx.collect(applyMessage);
 
             //每1秒产生一条数据

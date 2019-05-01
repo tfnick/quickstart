@@ -6,7 +6,7 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ApplyCountAggregator implements AggregateFunction<ApplyMessage, ApplyCountAggregator.MyCountAccumulator, Tuple2<String,Integer>> {
+public class ApplyCountAggregator implements AggregateFunction<ApplyMessage, ApplyCountAggregator.MyCountAccumulator,Tuple2<String, Integer>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplyCountAggregator.class);
 
@@ -37,6 +37,7 @@ public class ApplyCountAggregator implements AggregateFunction<ApplyMessage, App
         myCountAccumulator.count += acc1.count;
         return myCountAccumulator;
     }
+
 
     static class MyCountAccumulator{
         String idCard;
